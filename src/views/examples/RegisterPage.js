@@ -97,7 +97,7 @@ export default function RegisterPage() {
                     style={{ transform: squares7and8 }}
                   />
                   <Card className="card-register">
-                    <Form onSubmit={handleSubmit} className="form">
+                    <Form autoComplete="off" onSubmit={handleSubmit} className="form">
                       <CardHeader>
                         <CardImg
                           alt="..."

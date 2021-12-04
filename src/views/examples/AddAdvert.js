@@ -81,7 +81,7 @@ export default function ProfilePage() {
                     </h5>
                   </CardHeader>
                   <CardBody>
-                    <Form onSubmit={handleSubmit}>
+                    <Form autoComplete="off" onSubmit={handleSubmit}>
                       <Row>
                         <Col md="6">
                           <FormGroup>

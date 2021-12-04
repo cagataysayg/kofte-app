@@ -23,11 +23,9 @@ import "assets/css/nucleo-icons.css";
 import "assets/scss/blk-design-system-react.scss?v=1.2.0";
 import "assets/demo/demo.css";
 
-import Index from "views/Index.js";
 import LandingPage from "views/examples/LandingPage.js";
 import RegisterPage from "views/examples/RegisterPage.js";
 import LoginPage from "views/examples/LoginPage";
-import ProfilePage from "views/examples/ProfilePage.js";
 import ContactPage from "views/examples/ContactPage";
 import AboutPage from "views/examples/AboutPage";
 import AdvertPage from "views/examples/AdvertPage";
@@ -35,6 +33,7 @@ import OffersPage from "views/examples/OffersPage";
 import AddAdvert from "views/examples/AddAdvert";
 import AdvertDetailsPage from "views/examples/AdvertDetailsPage";
 import ChatPage from "views/examples/ChatPage";
+import AdvertOfferPage from "views/examples/AdvertOfferPage";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -43,26 +42,30 @@ ReactDOM.render(
         path="/components"
         render={(props) => <LandingPage {...props} />}
       />
-      <Route path="/anasayfa" render={(props) => <LandingPage {...props} />} />
+      <Route path="/ilanlar" render={(props) => <LandingPage {...props} />} />
       <Route path="/kayit" render={(props) => <RegisterPage {...props} />} />
       <Route path="/giris" render={(props) => <LoginPage {...props} />} />
       <Route path="/bize-ulas" render={(props) => <ContactPage {...props} />} />
       <Route path="/hakkimizda" render={(props) => <AboutPage {...props} />} />
       <Route path="/ilanlarim" render={(props) => <AdvertPage {...props} />} />
       <Route
+        path="/teklifler/:ilan"
+        render={(props) => <AdvertOfferPage {...props} />}
+      />
+      <Route
         path="/tekliflerim"
         render={(props) => <OffersPage {...props} />}
       />
       <Route path="/ilan-ekle" render={(props) => <AddAdvert {...props} />} />
       <Route
-        path="/ilan-detaylari"
+        path="/ilan-detaylari/:ilan"
         render={(props) => <AdvertDetailsPage {...props} />}
       />
       <Route
-        path="/sohbet"
+        path="/sohbet/:offer"
         render={(props) => <ChatPage {...props} />}
       />
-      <Redirect from="/" to="/anasayfa" />
+      <Redirect from="/" to="/ilanlar" />
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")

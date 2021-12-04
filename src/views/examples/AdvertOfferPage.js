@@ -6,7 +6,8 @@ import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import { useHistory } from "react-router";
 
-export default function LandingPage() {
+export default function LandingPage(props) {
+  const { ilan } = props.match.params;
   const history = useHistory();
   React.useEffect(() => {
     document.body.classList.toggle("landing-page");
@@ -15,11 +16,11 @@ export default function LandingPage() {
     };
   }, []);
 
-  const [data, setData] = React.useState([]);
+  const [data, setData] = React.useState({ offers: [] });
   console.log(data);
 
   React.useEffect(() => {
-    axios.get("offers").then((res) => {
+    axios.get(`myadverts/${ilan}`).then((res) => {
       setData(res.data.data);
     });
   }, []);
@@ -62,39 +63,31 @@ export default function LandingPage() {
           <div className="content-center">
             <Row className="row-grid justify-content-center align-items-center text-left">
               <Col className="text-center" lg="8" md="12">
-                <h2 className="title mb-5">TEKLİFLERİM</h2>
+                <h2 className="title mb-5">{data.title}</h2>
               </Col>
               <Table responsive>
                 <thead>
                   <tr>
                     <th className="text-center">#</th>
+                    <th>İsim</th>
                     <th>Açıklama</th>
-                    <th>İlan</th>
                     <th className="text-right">İşlem</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((row, index) => (
+                  {data.offers.map((row, index) => (
                     <tr>
                       <td className="text-center">{index + 1}</td>
                       <td>
-                        <img
-                          style={{
-                            width: "80px",
-                            height: "80px",
-                            objectFit: "contain",
-                          }}
-                          alt="asdas"
-                          src={row.photos[0]}
-                        />
+                        {row.user.name} {row.user.lastname}
                       </td>
-                      <td>{row.advert.title}</td>
+                      <td>{row.description}</td>
                       <td className="text-right">
                         <Button
                           className="btn-icon btn-simple"
                           color="warning"
                           size="sm"
-                          onClick={() => history.push(`sohbet/${row._id}`)}
+                          onClick={() => history.push(`../sohbet/${row._id}`)}
                         >
                           <i className="fa fa-comments" />
                         </Button>

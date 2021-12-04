@@ -4,8 +4,11 @@ import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import axios from "../../axios";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
 
 export default function LandingPage() {
+  const history = useHistory();
+
   React.useEffect(() => {
     document.body.classList.toggle("landing-page");
     return function cleanup() {
@@ -83,6 +86,7 @@ export default function LandingPage() {
                           className="btn-icon btn-simple"
                           color="success"
                           size="sm"
+                          onClick={() => history.push(`teklifler/${row._id}`)}
                         >
                           <span>{row.offers.length}</span>
                         </Button>
@@ -90,30 +94,13 @@ export default function LandingPage() {
                       <td className="text-right">
                         <Button
                           className="btn-icon btn-simple"
-                          color="warning"
-                          size="sm"
-                          to="/sohbet"
-                          tag={Link}
-                        >
-                          <i className="fa fa-comments" />
-                        </Button>
-                        {` `}
-                        <Button
-                          className="btn-icon btn-simple"
                           color="info"
                           size="sm"
-                          to="/ilan-detaylari"
-                          tag={Link}
+                          onClick={() =>
+                            history.push(`ilan-detaylari/${row._id}`)
+                          }
                         >
                           <i className="fa fa-info"></i>
-                        </Button>
-                        {` `}
-                        <Button
-                          className="btn-icon btn-simple"
-                          color="danger"
-                          size="sm"
-                        >
-                          <i className="fa fa-trash"></i>
                         </Button>
                       </td>
                     </tr>

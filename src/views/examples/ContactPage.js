@@ -55,7 +55,7 @@ export default function ProfilePage() {
                     </h5>
                   </CardHeader>
                   <CardBody>
-                    <Form>
+                    <Form autoComplete="off">
                       <Row>
                         <Col md="6">
                           <FormGroup>

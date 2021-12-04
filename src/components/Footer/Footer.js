@@ -40,8 +40,8 @@ export default function Footer() {
           <Col md="3">
             <Nav>
               <NavItem>
-                <NavLink to="/anasayfa" tag={Link}>
-                  Anasayfa
+                <NavLink to="/ilanlar" tag={Link}>
+                  İlanlar
                 </NavLink>
               </NavItem>
               <NavItem>

@@ -75,7 +75,7 @@ export default function ProfilePage() {
                 <h1 className="profile-title text-left">Biz Kimiz</h1>
                 <h5 className="text-on-back"><i className="tim-icons icon-world" /></h5>
                 <p className="profile-description text-left">
-                  Celal Bayar Üniversitesi Yazılım Mühendisliğ 4. Sınıf Öğrencileriyiz.
+                  Çağatay Saygın<br /> Kadir Baştimar<br /> Baran Acar<br /> Hackathon yarışma projesi.
                 </p>
               </Col>
             </Row>
@@ -89,7 +89,16 @@ export default function ProfilePage() {
                 <h1 className="profile-title text-left">Ne Yapıyoruz?</h1>
                 <h5 className="text-on-back"><i className="tim-icons icon-world" /></h5>
                 <p className="profile-description text-left">
-                  İnsanların aradıkları ürünleri sistemimize yükleyerek satıcıları bulmalarınız sağlıyoruz. Böylelikle satıcı alıcıyı buluyor.
+                &emsp;&emsp;Kofte, İstediği ürünü ararken vakit kaybetmek istemeyen ve aradığı özel ürünü bulamayan 
+kullanıcıların ilan oluşturduğu, elinde ilana uygun ürünü olan kullanıcların satış teklifi 
+oluşturabildiği platformdur.<br />
+
+&emsp;&emsp;Uygulama içerisinde mesajlaşma özelliği vardır. Aradığınız ürünü, başka bir kulllanıcı size
+satmak isterse satmak istediği fiyat ile birlikte size teklif gönderir.<br />
+
+&emsp;&emsp;Kofte kullanıcılarına sunduğu birçok özellikten en çok dikkat çekenlerinden birisi de ülkeler arası 
+seyehat eden yolcuların seyehat ettiği yerlerden sipariş alıp seyehat edecekleri yerde başka kullanıcıya
+satmasıdır.
                 </p>
               </Col>
               <Col md="6">

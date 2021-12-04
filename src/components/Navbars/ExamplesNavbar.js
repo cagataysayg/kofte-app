@@ -48,7 +48,7 @@ export default function ExamplesNavbar() {
   const handleExit = () => {
     cookies.remove("accessToken");
     ["/ilanlarim", "/tekliflerim"].includes(window.location.pathname) &&
-      history.push("anasayfa");
+      history.push("ilanlar");
     handleAuth();
   };
 
@@ -85,9 +85,9 @@ export default function ExamplesNavbar() {
     <Navbar className={"fixed-top " + color} color-on-scroll="100" expand="lg">
       <Container>
         <div className="navbar-translate">
-          <NavbarBrand to="/anasayfa" id="navbar-brand" tag={Link}>
+          <NavbarBrand to="/ilanlar" id="navbar-brand" tag={Link}>
             <span>KÖFTE • </span>
-            Tersine Satış
+            Talep - Arz
           </NavbarBrand>
           <UncontrolledTooltip placement="bottom" target="navbar-brand">
             :)
@@ -129,8 +129,8 @@ export default function ExamplesNavbar() {
           </div>
           <Nav navbar>
             <NavItem>
-              <NavLink tag={Link} to="/anasayfa">
-                Anasayfa
+              <NavLink tag={Link} to="/ilanlar">
+                İlanlar
               </NavLink>
             </NavItem>
             {auth && (

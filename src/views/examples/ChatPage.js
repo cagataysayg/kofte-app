@@ -1,5 +1,15 @@
 import React from "react";
-import { Button, Row, Col, Form, FormGroup, InputGroup, InputGroupText, InputGroupAddon, Input } from "reactstrap";
+import {
+  Button,
+  Row,
+  Col,
+  Form,
+  FormGroup,
+  InputGroup,
+  InputGroupText,
+  InputGroupAddon,
+  Input,
+} from "reactstrap";
 
 // core components
 import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js";
@@ -9,7 +19,7 @@ import { Link } from "react-router-dom";
 import classnames from "classnames";
 import { ChatBubble, BubbleGroup, Message } from "react-chat-ui";
 
-export default function LandingPage() {
+export default function LandingPage(props) {
   React.useEffect(() => {
     document.body.classList.toggle("landing-page");
     return function cleanup() {
@@ -17,13 +27,28 @@ export default function LandingPage() {
     };
   }, []);
 
-  const [data, setData] = React.useState([]);
+  const [data, setData] = React.useState({ messages: [] });
+  const [sendMessage, setSendMessage] = React.useState("");
+
+  const getData = () => {
+    axios.get(`messages/${props.match.params.offer}`).then((res) => {
+      setData(res.data);
+    });
+  };
 
   React.useEffect(() => {
-    axios.get("adverts").then((res) => {
-      setData(res.data.data);
-    });
+    getData();
   }, []);
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    axios
+      .post(`messages/${props.match.params.offer}`, { message: sendMessage })
+      .then(() => {
+        setSendMessage("");
+        getData();
+      });
+  };
 
   const [formModal, setFormModal] = React.useState(false);
   const [textFocus, setTextFocus] = React.useState(false);
@@ -64,65 +89,52 @@ export default function LandingPage() {
             src={require("assets/img/cercuri.png").default}
           />
           <div className="content-center">
-            <Row >
+            <Row>
               <Col className="col-md-6 offset-3">
                 <div className="container">
-                  <BubbleGroup
-                    messages={[
-                      new Message({ id: 1, message: "Hey!" }),
-                      new Message({ id: 1, message: "I forgot to mention..." }),
-                      new Message({
-                        id: 1,
-                        message:
-                          "Oh no, I forgot... I think I was going to say I'm a BubbleGroup"
-                      })
-                    ]}
-                    id={1}
-                    showSenderName={true}
-                    senderName={"KÖFTE Sohbet Ekranı"}
-                  />
-                  <ChatBubble
-                    message={new Message({ id: 2, message: "I 'm a single ChatBubble!" })}
-                  />
-                  <BubbleGroup
-                    messages={[
-                      new Message({ id: 0, message: "How could you forget already?!" }),
-                      new Message({
-                        id: 0,
-                        message: "Oh well. I'm a BubbleGroup as well"
-                      })
-                    ]}
-                    id={1}
-                    showSenderName={true}
-                    senderName={"Elon Musk"}
-                  />
+                  KÖFTE Sohbet Ekranı
+                  <br />
+                  <br />
+                  {data.messages.map((message, index) => (
+                    <ChatBubble
+                      key={"adasd-" + index}
+                      message={
+                        new Message({
+                          id: data.me === message.user ? 0 : 1,
+                          message: message.message,
+                        })
+                      }
+                    />
+                  ))}
                 </div>
-                <Form role="form">
-                    <FormGroup >
-                      <InputGroup
-                        className={classnames("input-group-alternative", {
-                          "input-group-focus": textFocus,
-                        })}
-                      >
-                        <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="tim-icons icon-double-right" />
-                          </InputGroupText>
-                        </InputGroupAddon>
-                        <Input
-                          placeholder="Mesajınız"
-                          type="text"
-                          onFocus={(e) => setTextFocus(true)}
-                          onBlur={(e) => setTextFocus(false)}
-                        />
-                      </InputGroup>
-                      <div className="text-center">
-                      <Button  color="success" type="button">
+                <Form autoComplete="off" onSubmit={handleSend} role="form">
+                  <FormGroup>
+                    <InputGroup
+                      className={classnames("input-group-alternative", {
+                        "input-group-focus": textFocus,
+                      })}
+                    >
+                      <InputGroupAddon addonType="prepend">
+                        <InputGroupText>
+                          <i className="tim-icons icon-double-right" />
+                        </InputGroupText>
+                      </InputGroupAddon>
+                      <Input
+                        placeholder="Mesajınız"
+                        type="text"
+                        onFocus={(e) => setTextFocus(true)}
+                        onBlur={(e) => setTextFocus(false)}
+                        value={sendMessage}
+                        onChange={(e) => setSendMessage(e.target.value)}
+                      />
+                    </InputGroup>
+                    <div className="text-center">
+                      <Button color="success" type="submit">
                         Gönder
                       </Button>
                     </div>
-                    </FormGroup>
-                  </Form>
+                  </FormGroup>
+                </Form>
               </Col>
             </Row>
           </div>

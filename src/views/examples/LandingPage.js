@@ -1,13 +1,31 @@
 import React from "react";
-import { Button, Row, Col, Table, Modal, Form, FormGroup, InputGroup, InputGroupText, InputGroupAddon, Input } from "reactstrap";
+import {
+  Button,
+  Row,
+  Col,
+  Table,
+  Modal,
+  Form,
+  FormGroup,
+  InputGroup,
+  InputGroupText,
+  InputGroupAddon,
+  Input,
+  Label,
+} from "reactstrap";
+import "react-dropzone-uploader/dist/styles.css";
+import Dropzone from "react-dropzone-uploader";
 
 import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import axios from "../../axios";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
+import cookies from "cookies";
+import { useHistory } from "react-router";
 
 export default function LandingPage() {
+  const history = useHistory();
   React.useEffect(() => {
     document.body.classList.toggle("landing-page");
     return function cleanup() {
@@ -15,17 +33,41 @@ export default function LandingPage() {
     };
   }, []);
 
-  const [data, setData] = React.useState([]);
+  const [data, setData] = React.useState({ data: [], offerData: {} });
 
   React.useEffect(() => {
     axios.get("adverts").then((res) => {
-      setData(res.data.data);
+      setData({
+        data: res.data.data,
+        offerData: { is_cargo: false, spesifics: [] },
+      });
     });
   }, []);
 
   const [formModal, setFormModal] = React.useState(false);
   const [textFocus, setTextFocus] = React.useState(false);
-  
+  const [descFocus, setDescFocus] = React.useState(false);
+  const [files, setFiles] = React.useState(null);
+
+  const addOffer = (self) => {
+    axios.post("offers", data.offerData).then((res) => {
+      if (files) {
+        const formData = new FormData();
+        formData.append("img", files);
+
+        axios.post("upload/offer/" + res.data.data._id, formData).then(() => {
+          history.push("tekliflerim");
+        });
+      } else {
+        history.push("tekliflerim");
+      }
+    });
+  };
+
+  const handleChangeStatus = ({ meta, file }, status) => {
+    status === "done" && setFiles(file);
+  };
+
   return (
     <>
       <ExamplesNavbar />
@@ -77,7 +119,7 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <div className="modal-body">
-                  <Form role="form">
+                  <Form autoComplete="off" role="form">
                     <FormGroup className="mb-3">
                       <InputGroup
                         className={classnames("input-group-alternative", {
@@ -85,16 +127,23 @@ export default function LandingPage() {
                         })}
                       >
                         <InputGroupAddon addonType="prepend">
-                          <InputGroupText>
-                            <i className="tim-icons icon-double-right" />
-                          </InputGroupText>
+                          <InputGroupText>TL</InputGroupText>
                         </InputGroupAddon>
                         <Input
                           placeholder="Teklifiniz"
                           type="number"
-                          id="description"
+                          id="price"
                           onFocus={(e) => setTextFocus(true)}
                           onBlur={(e) => setTextFocus(false)}
+                          onChange={(e) =>
+                            setData({
+                              ...data,
+                              offerData: {
+                                ...data.offerData,
+                                price: Number(e.target.value),
+                              },
+                            })
+                          }
                         />
                       </InputGroup>
                       <InputGroup
@@ -110,13 +159,61 @@ export default function LandingPage() {
                         <Input
                           placeholder="Açıklama"
                           type="textarea"
-                          onFocus={(e) => setTextFocus(true)}
-                          onBlur={(e) => setTextFocus(false)}
+                          id="description"
+                          onFocus={(e) => setDescFocus(true)}
+                          onBlur={(e) => setDescFocus(false)}
+                          onChange={(e) =>
+                            setData({
+                              ...data,
+                              offerData: {
+                                ...data.offerData,
+                                description: e.target.value,
+                              },
+                            })
+                          }
                         />
                       </InputGroup>
+
+                      <InputGroup
+                        className={classnames("input-group-alternative", {
+                          "input-group-focus": textFocus,
+                        })}
+                      >
+                        <Dropzone
+                          onChangeStatus={handleChangeStatus}
+                          accept="image/*,audio/*,video/*"
+                          multiple={false}
+                        />
+                      </InputGroup>
+                      <FormGroup check>
+                        <Label check>
+                          <Input
+                            type="checkbox"
+                            onChange={(e) => {
+                              console.log(e.target.value);
+                              setData({
+                                ...data,
+                                offerData: {
+                                  ...data.offerData,
+                                  is_cargo: !data.offerData.is_cargo,
+                                },
+                              });
+                            }}
+                          />
+                          Kargo ile gönderebilirim
+                          <span className="form-check-sign">
+                            <span className="check"></span>
+                          </span>
+                        </Label>
+                      </FormGroup>
                     </FormGroup>
                     <div className="text-center">
-                      <Button className="my-4" color="success" type="button">
+                      <Button
+                        className="my-4"
+                        color="success"
+                        type="button"
+                        onClick={(self) => addOffer(self)}
+                      >
                         Teklif Ver
                       </Button>
                     </div>
@@ -138,7 +235,7 @@ export default function LandingPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((row, index) => (
+                  {data.data.map((row, index) => (
                     <tr>
                       <td className="text-center">{index + 1}</td>
                       <td>{row.title}</td>
@@ -148,27 +245,24 @@ export default function LandingPage() {
                           className="btn-icon btn-simple"
                           color="success"
                           size="sm"
-                          onClick={() => setFormModal(true)}
+                          onClick={() => {
+                            setData({
+                              ...data,
+                              offerData: { ...data.offerData, advert: row._id },
+                            });
+                            setFormModal(true);
+                          }}
                         >
                           <i className="fa fa-dollar-sign"></i>
                         </Button>
                         {` `}
                         <Button
                           className="btn-icon btn-simple"
-                          color="warning"
-                          size="sm"
-                          to="/sohbet"
-                          tag={Link}
-                        >
-                          <i className="fa fa-comments" />
-                        </Button>
-                        {` `}
-                        <Button
-                          className="btn-icon btn-simple"
                           color="info"
                           size="sm"
-                          to="/ilan-detaylari"
-                          tag={Link}
+                          onClick={() =>
+                            history.push(`ilan-detaylari/${row._id}`)
+                          }
                         >
                           <i className="fa fa-info"></i>
                         </Button>

@@ -56,6 +56,7 @@
     "react-chat-window": "^1.2.1",
     "react-datetime": "3.0.4",
     "react-dom": "17.0.1",
+    "react-dropzone-uploader": "^2.11.0",
     "react-final-form": "4.1.0",
     "react-final-form-arrays": "2.0.3",
     "react-hook-form": "^7.20.5",

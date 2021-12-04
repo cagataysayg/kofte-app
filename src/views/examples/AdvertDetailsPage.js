@@ -19,6 +19,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import axios from "../../axios";
 
 // core components
 import ExamplesNavbar from "components/Navbars/ExamplesNavbar.js";
@@ -26,8 +27,16 @@ import Footer from "components/Footer/Footer.js";
 
 let ps = null;
 
-export default function ProfilePage() {
+export default function ProfilePage(props) {
   const [tabs, setTabs] = React.useState(1);
+  const [data, setData] = React.useState(null);
+
+  React.useEffect(() => {
+    axios.get(`adverts/${props.match.params.ilan}`).then((res) => {
+      setData(res.data.data);
+    });
+  }, []);
+
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
@@ -46,8 +55,10 @@ export default function ProfilePage() {
       }
       document.body.classList.toggle("profile-page");
     };
-  },[]);
-  return (
+  }, []);
+  return !data ? (
+    <></>
+  ) : (
     <>
       <ExamplesNavbar />
       <div className="wrapper">
@@ -64,92 +75,60 @@ export default function ProfilePage() {
           />
           <Container className="align-items-center">
             <Row>
-              <Col lg="6" md="6">
-                <h1 className="profile-title text-left">İlan Detayı / Teklif Güncelle</h1>
-                <h5 className="text-on-back"><i className="tim-icons icon-bag-16" /></h5>
-                <p className="profile-description mt-3">
-                  Ürünün açıklaması buraya gelecek
-                </p>
-              </Col>
-              <Col className="ml-auto mr-auto" lg="4" md="6">
+              <Col lg="12" md="12">
                 <Card className="card-coin card-plain">
                   <CardHeader>
-                    <img
-                      alt="..."
-                      className="img-center img-fluid rounded-circle"
-                      src={require("assets/img/bitcoin.png").default}
-                    />
-                    <h4 className="title">Iphone 13</h4>
+                    <h4 className="title">{data.title}</h4>
                   </CardHeader>
                   <CardBody>
-                    <Nav
-                      className="nav-tabs-primary justify-content-center"
-                      tabs
-                    >
-                      <NavItem>
-                        <NavLink
-                          className={classnames({
-                            active: tabs === 1,
-                          })}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setTabs(1);
-                          }}
-                          href="#pablo"
-                        >
-                          Teklif Güncelle
-                        </NavLink>
-                      </NavItem>
-                      <NavItem>
-                        <NavLink
-                          className={classnames({
-                            active: tabs === 2,
-                          })}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setTabs(2);
-                          }}
-                          href="#pablo"
-                        >
-                          Detaylar
-                        </NavLink>
-                      </NavItem>
-                    </Nav>
                     <TabContent
                       className="tab-subcategories"
-                      activeTab={"tab" + tabs}
+                      activeTab={"tab2"}
                     >
-                      <TabPane tabId="tab1">
-                        <Row>
-                          <Label sm="4">Yeni Teklif</Label>
-                          <Col sm="8">
-                            <FormGroup>
-                              <Input placeholder="1.587" type="text" />
-                            </FormGroup>
-                          </Col>
-                        </Row>
-                        <Button
-                          className="btn-simple btn-icon btn-round float-right"
-                          color="primary"
-                          type="submit"
-                        >
-                          <i className="tim-icons icon-send" />
-                        </Button>
-                      </TabPane>
                       <TabPane tabId="tab2">
                         <Table className="tablesorter" responsive>
                           <thead className="text-primary">
                             <tr>
-                              <th className="header">Kırmızı Renk</th>
+                              <th className="header">
+                                Açıklama: {data.description}
+                              </th>
+                            </tr>
+                          </thead>
+                          <thead className="text-primary">
+                            <tr>
+                              <th className="header">
+                                BÜTÇE: {data.budget} TL
+                              </th>
+                            </tr>
+                          </thead>
+                          <thead className="text-primary">
+                            <tr>
+                              <th className="header">
+                                KARGO KABUL EDİYO MU?:{" "}
+                                {data.is_cargo_accepts ? "Evet" : "Hayır"}
+                              </th>
+                            </tr>
+                          </thead>
+                          <thead className="text-primary">
+                            <tr>
+                              <th className="header">ÖZELLİKLER;</th>
+                            </tr>
+                          </thead>
+                          <thead className="text-primary">
+                            <tr>
+                              <th className="header">Özellik</th>
+                              <th className="header">Açıklama</th>
+                              <th className="header">Zorunlu?</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>Orijinal</td>
-                            </tr>
-                            <tr>
-                              <td>Bla bla bla</td>
-                            </tr>
+                            {data.specs.map((spec) => (
+                              <tr>
+                                <td>{spec.spec}</td>
+                                <td>{spec.desc}</td>
+                                <td>{spec.mandatory ? "Evet" : "Hayır"}</td>
+                              </tr>
+                            ))}
                           </tbody>
                         </Table>
                       </TabPane>

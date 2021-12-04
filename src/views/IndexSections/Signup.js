@@ -79,7 +79,7 @@ export default function Signup() {
                 <CardTitle tag="h4">Register</CardTitle>
               </CardHeader>
               <CardBody>
-                <Form className="form">
+                <Form autoComplete="off" className="form">
                   <InputGroup
                     className={classnames({
                       "input-group-focus": fullNameFocus,
