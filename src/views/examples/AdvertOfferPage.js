@@ -69,6 +69,7 @@ export default function LandingPage(props) {
                 <thead>
                   <tr>
                     <th className="text-center">#</th>
+                    <th>Resim</th>
                     <th>İsim</th>
                     <th>Açıklama</th>
                     <th className="text-right">İşlem</th>
@@ -78,6 +79,19 @@ export default function LandingPage(props) {
                   {data.offers.map((row, index) => (
                     <tr>
                       <td className="text-center">{index + 1}</td>
+                      <td>
+                        {row.photos[0] && (
+                          <img
+                            style={{
+                              width: "80px",
+                              height: "80px",
+                              objectFit: "contain",
+                            }}
+                            alt="asdas"
+                            src={row.photos[0]}
+                          />
+                        )}
+                      </td>
                       <td>
                         {row.user.name} {row.user.lastname}
                       </td>

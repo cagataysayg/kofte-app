@@ -78,15 +78,17 @@ export default function LandingPage() {
                     <tr>
                       <td className="text-center">{index + 1}</td>
                       <td>
-                        <img
-                          style={{
-                            width: "80px",
-                            height: "80px",
-                            objectFit: "contain",
-                          }}
-                          alt="asdas"
-                          src={row.photos[0]}
-                        />
+                        {row.photos[0] && (
+                          <img
+                            style={{
+                              width: "80px",
+                              height: "80px",
+                              objectFit: "contain",
+                            }}
+                            alt="asdas"
+                            src={row.photos[0]}
+                          />
+                        )}
                       </td>
                       <td>{row.advert.title}</td>
                       <td className="text-right">
